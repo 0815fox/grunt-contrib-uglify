@@ -7,7 +7,6 @@
  */
 
 'use strict';
-
 // External libs.
 var path = require('path');
 var UglifyJS = require('uglify-js');
@@ -229,13 +228,20 @@ exports.init = function(grunt) {
     if (options.screwIE8) {
       outputOptions.screw_ie8 = true;
     }
-
     if (options.sourceMap) {
 
       var destBasename = path.basename(dest);
       var sourceMapIn;
-      if (options.sourceMapIn) {
+      if (typeof options.sourceMapIn == 'string') {
         sourceMapIn = grunt.file.readJSON(options.sourceMapIn);
+      } else if (typeof options.sourceMapIn == 'boolean' && options.sourceMapIn) {
+        sourceMapIn = function(source){
+          return grunt.file.readJSON(source + '.map');
+        }
+      } else if (typeof options.sourceMapIn == 'function') {
+        sourceMapIn = function(source){
+          return grunt.file.readJSON(options.sourceMapIn(source));
+        }
       }
       outputOptions.source_map = UglifyJS.SourceMap({
         file: destBasename,

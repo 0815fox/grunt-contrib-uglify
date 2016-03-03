@@ -7,7 +7,6 @@
  */
 
 'use strict';
-
 var path = require('path');
 var chalk = require('chalk');
 var maxmin = require('maxmin');
@@ -87,12 +86,12 @@ module.exports = function(grunt) {
       }
 
       // function to get the name of the sourceMapIn file
-      if (typeof options.sourceMapIn === 'function') {
-        if (src.length !== 1) {
-          grunt.fail.warn('Cannot generate `sourceMapIn` for multiple source files.');
-        }
-        mapInNameGenerator = options.sourceMapIn;
-      }
+      // if (typeof options.sourceMapIn === 'function') {
+      //   if (src.length !== 1) {
+      //     grunt.fail.warn('Cannot generate `sourceMapIn` for multiple source files.');
+      //   }
+      //   mapInNameGenerator = options.sourceMapIn;
+      // }
 
       // dynamically create destination sourcemap name
       if (mapNameGenerator) {
@@ -111,15 +110,15 @@ module.exports = function(grunt) {
       }
 
       // Dynamically create incoming sourcemap names
-      if (mapInNameGenerator) {
-        try {
-          options.sourceMapIn = mapInNameGenerator(src[0]);
-        } catch (e) {
-          err = new Error('SourceMapInName failed.');
-          err.origError = e;
-          grunt.fail.warn(err);
-        }
-      }
+      // if (mapInNameGenerator) {
+      //   try {
+      //     options.sourceMapIn = mapInNameGenerator(src[0]);
+      //   } catch (e) {
+      //     err = new Error('SourceMapInName failed.');
+      //     err.origError = e;
+      //     grunt.fail.warn(err);
+      //   }
+      // }
 
       // Calculate the path from the dest file to the sourcemap for the
       // sourceMappingURL reference
@@ -134,7 +133,7 @@ module.exports = function(grunt) {
       try {
         result = uglify.minify(src, f.dest, options);
       } catch (e) {
-        console.log(e);
+        console.log(e.stack);
         err = new Error('Uglification failed.');
         if (e.message) {
           err.message += '\n' + e.message + '. \n';
